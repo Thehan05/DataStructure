@@ -228,39 +228,46 @@ public class TreeMap<K, V> extends AbstractSortedMap<K, V> {
     }
 
     protected Position<Entry<K, V>> parent(Position<Entry<K, V>> p) {
-        return tree.parent(p);
+        return (p == null) ? null : tree.parent(p);
     }
 
     protected Position<Entry<K, V>> left(Position<Entry<K, V>> p) {
-        return tree.left(p);
+        return (p == null) ? null : tree.left(p);
     }
 
     protected Position<Entry<K, V>> right(Position<Entry<K, V>> p) {
-        return tree.right(p);
+        return (p == null) ? null : tree.right(p);
     }
 
     protected Position<Entry<K, V>> sibling(Position<Entry<K, V>> p) {
-        return tree.sibling(p);
+        if (p == null) return null;
+
+        Position<Entry<K, V>> par = parent(p);
+        if (par == null) return null;
+
+        return (p == left(par)) ? right(par) : left(par);
     }
 
     protected boolean isRoot(Position<Entry<K, V>> p) {
-        return tree.isRoot(p);
+        return p != null && tree.isRoot(p);
     }
 
     protected boolean isExternal(Position<Entry<K, V>> p) {
-        return tree.isExternal(p);
+        return p == null || p.getElement() == null || tree.isExternal(p);
     }
 
     protected boolean isInternal(Position<Entry<K, V>> p) {
-        return tree.isInternal(p);
+        return p != null && p.getElement() != null && tree.isInternal(p);
     }
 
     protected void set(Position<Entry<K, V>> p, Entry<K, V> e) {
-        tree.set(p, e);
+        if (p != null) {
+            tree.set(p, e);
+        }
     }
 
     protected Entry<K, V> remove(Position<Entry<K, V>> p) {
-        return tree.remove(p);
+        return (p == null) ? null : tree.remove(p);
     }
 
     /**
@@ -271,8 +278,8 @@ public class TreeMap<K, V> extends AbstractSortedMap<K, V> {
      * @param p   a position of the tree serving as root of a subtree
      * @return Position holding key, or last node reached during search
      */
-    private Position<Entry<K, V>> treeSearch(Position<Entry<K, V>> p, K key) {
-        if (isExternal(p))
+    protected Position<Entry<K, V>> treeSearch(Position<Entry<K, V>> p, K key) {
+        if (p == null || p.getElement() == null || isExternal(p))
             return p;
         int comp = compare(key, p.getElement());
         if (comp == 0)
@@ -361,7 +368,7 @@ public class TreeMap<K, V> extends AbstractSortedMap<K, V> {
     public V remove(K key) throws IllegalArgumentException {
         checkKey(key);
         Position<Entry<K, V>> p = treeSearch(root(), key);
-        if (isExternal(p)) {
+        if (p == null || isExternal(p)) {
             rebalanceAccess(p);
             return null;
         }
@@ -373,11 +380,19 @@ public class TreeMap<K, V> extends AbstractSortedMap<K, V> {
             p = replacement;
         }
 
-        Position<Entry<K, V>> leaf = isExternal(left(p)) ? left(p) : right(p);
-        Position<Entry<K, V>> sib = sibling(leaf);
-        remove(leaf);
-        remove(p);
-        rebalanceDelete(sib);
+        Position<Entry<K, V>> leftP = left(p);
+        Position<Entry<K, V>> rightP = right(p);
+
+        if (leftP != null && isExternal(leftP)) {
+            tree.remove(leftP);
+        } else if (rightP != null && isExternal(rightP)) {
+            tree.remove(rightP);
+        }
+
+        Position<Entry<K, V>> parentBefore = parent(p);
+        tree.remove(p);
+
+        rebalanceDelete(parentBefore);
         return old;
     }
 

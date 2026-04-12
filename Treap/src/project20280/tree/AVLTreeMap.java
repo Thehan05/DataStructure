@@ -31,6 +31,7 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
      * Returns the height of the given tree position.
      */
     protected int height(Position<Entry<K, V>> p) {
+        if (p == null) return 0;
         return tree.getAux(p);
     }
 
@@ -38,6 +39,7 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
      * Recomputes the height of the given position based on its children's heights.
      */
     protected void recomputeHeight(Position<Entry<K, V>> p) {
+        if (p == null) return;
         tree.setAux(p, 1 + Math.max(height(left(p)), height(right(p))));
     }
 

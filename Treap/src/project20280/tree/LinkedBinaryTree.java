@@ -335,11 +335,37 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      * @throws IllegalArgumentException if p has two children.
      */
     public E remove(Position<E> p) throws IllegalArgumentException {
-        // TODO
         Node<E> node = validate(p);
-        if (numChildren(p) == 2) throw new IllegalArgumentException("p has two children");
 
-        Node<E> child = (node.getLeft() != null) ? node.getLeft() : node.getRight();
+        Node<E> left = node.getLeft();
+        Node<E> right = node.getRight();
+
+        boolean leftIsReal =
+                left != null &&
+                        !(left.getElement() == null && left.getLeft() == null && left.getRight() == null);
+
+        boolean rightIsReal =
+                right != null &&
+                        !(right.getElement() == null && right.getLeft() == null && right.getRight() == null);
+
+        int realChildren = 0;
+        if (leftIsReal) realChildren++;
+        if (rightIsReal) realChildren++;
+
+        if (realChildren == 2) {
+            throw new IllegalArgumentException("p has two children");
+        }
+
+        Node<E> child;
+        if (leftIsReal) {
+            child = left;
+        } else if (rightIsReal) {
+            child = right;
+        } else if (left != null) {
+            child = left;
+        } else {
+            child = right;
+        }
 
         if (child != null) {
             child.setParent(node.getParent());
@@ -356,7 +382,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
         size--;
         E removed = node.getElement();
 
-        // Help GC + mark as defunct (convention used in validate)
         node.setElement(null);
         node.setLeft(null);
         node.setRight(null);

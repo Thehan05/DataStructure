@@ -42,39 +42,42 @@ public class TreapMap<K, V> extends TreeMap<K, V> {
 
     @Override
     protected void rebalanceDelete(Position<Entry<K, V>> p) {
-        if(!isInternal(p))  return;
 
-        while(isInternal(p)) {
+    }
+
+    @Override
+    public V remove(K key) throws IllegalArgumentException {
+        checkKey(key);
+        Position<Entry<K, V>> p = treeSearch(root(), key);
+
+        if(isExternal(p)) {
+            rebalanceAccess(p);
+            return null;
+        }
+
+        V old = p.getElement().getValue();
+
+        while(isInternal(left(p)) || isInternal(right(p))) {
             Position<Entry<K, V>> leftC = left(p);
             Position<Entry<K, V>> rightC = right(p);
 
             boolean hasLeft = isInternal(leftC);
             boolean hasRight = isInternal(rightC);
 
-            if(!hasLeft && !hasRight) {
-                break;
-            }
-
-            Position<Entry<K, V>> highChild;
+            Position<Entry<K,V>> highChild;
             if(hasLeft && hasRight) {
-                if(priority(leftC) > priority(rightC)) {
-                    highChild = leftC;
-                } else {
-                    highChild = rightC;
-                }
-            } else if(hasLeft) {
-                highChild = leftC;
+                highChild = (priority(leftC) > priority(rightC)) ? leftC : rightC;
             } else {
-                highChild = rightC;
+                highChild = hasLeft ? leftC : rightC;
             }
 
-            if(priority(highChild) > priority(p)) {
-                rotate(highChild);
-            } else {
-                break;
-            }
-
+            rotate(highChild);
         }
+
+        Position<Entry<K, V>> leaf = isExternal(left(p)) ? left(p) : right(p);
+        remove(leaf);
+        remove(p);
+        return old;
     }
 
     public int height() {
@@ -87,7 +90,7 @@ public class TreapMap<K, V> extends TreeMap<K, V> {
     }
 
     public boolean isValidTreap() {
-        return isHeap(root());
+        return isHeap(root()) && isBST(root(), null, null);
     }
 
     private boolean isHeap(Position<Entry<K, V>> p) {
@@ -102,4 +105,14 @@ public class TreapMap<K, V> extends TreeMap<K, V> {
         return isHeap(leftChild) && isHeap(rightChild);
     }
 
+    private boolean isBST(Position<Entry<K, V>> p, K lower, K upper) {
+        if (isExternal(p)) return true;
+
+        K key = p.getElement().getKey();
+
+        if(lower != null && compare(key, lower) < 0) return false;
+        if(upper != null && compare(key, upper) > 0) return false;
+
+        return isBST(left(p), lower, key) && isBST(right(p), key, upper);
+    }
 }
