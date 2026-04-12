@@ -115,4 +115,26 @@ public class TreapMap<K, V> extends TreeMap<K, V> {
 
         return isBST(left(p), lower, key) && isBST(right(p), key, upper);
     }
+
+    // making an empt list and filling it with Treap entries in sorted order
+    public ArrayList<Entry<K, V>> inOrderList() {
+        // in order traversal from the root
+        ArrayList<Entry<K, V>> list = new ArrayList<>();
+        inOrderHelper(root(), list);
+        return list;
+    }
+
+    // taking the current node and the new list to actually do the tree traversal
+    private void inOrderHelper(Position<Entry<K, V>> p, ArrayList<Entry<K, V>> list) {
+        // error check if empty and goes back to previous node
+        if (isExternal(p)) {
+            return;
+        }
+        // in the tree the recursion make us go deep left which contains the smaller keys
+        inOrderHelper(left(p), list);
+        // add the deepest all the way up
+        list.add(p.getElement());
+        // helps us go right when given the option returning back up from the left
+        inOrderHelper(right(p), list);
+    }
 }
