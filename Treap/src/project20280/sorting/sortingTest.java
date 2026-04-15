@@ -18,36 +18,36 @@ public class sortingTest {
         System.out.println("+--------+---------------+---------------+---------------+---------------+---------------+");
     }
     @Test
-    void testSortingRandom() {
+    void testRandom() {
         printHeader("random");
         for (int n : SIZES) {
             int[] data = Benchmark.generateData(n, "random");
-            printRow(n, data);
+            print(n, data);
         }
         printFooter();
     }
 
     @Test
-    void testSortingNearlySorted() {
+    void testNearlySorted() {
         printHeader("nearly_sorted");
         for (int n : SIZES) {
             int[] data = Benchmark.generateData(n, "nearly_sorted");
-            printRow(n, data);
+            print(n, data);
         }
         printFooter();
     }
 
     @Test
-    void testSortingReverse() {
+    void testReverse() {
         printHeader("reverse");
         for (int n : SIZES) {
             int[] data = Benchmark.generateData(n, "reverse");
-            printRow(n, data);
+            print(n, data);
         }
         printFooter();
     }
 
-    private void printRow(int n, int[] data) {
+    private void print(int n, int[] data) {
         long treap = Benchmark.benchmarkTreapSort(data, ITERATIONS);
         long pq    = Benchmark.benchmarkPQSort(data, ITERATIONS);
         long tim   = Benchmark.benchmarkCollectionsSort(data, ITERATIONS);
