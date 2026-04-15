@@ -7,6 +7,15 @@ import java.util.List;
 
 public class MergeSort {
 
+    public static void sort(int[] arr) {
+        Integer[] boxed = new Integer[arr.length];
+        for (int i = 0; i < arr.length; i++) boxed[i] = arr[i];
+
+        mergeSort(boxed, Comparator.naturalOrder());
+
+        for (int i = 0; i < arr.length; i++) arr[i] = boxed[i];
+    }
+
     public static <T extends Comparable<? super T>> void mergeSort(final T[] data,
                                                                    final Comparator<T> comparator) {
         if (data == null || data.length <= 1) {

@@ -139,4 +139,38 @@ public class Benchmark {
         return total / iterations;
     }
 
+
+    public static void main(String[] args) {
+        int[] sizes = {100, 500, 1000, 2000, 5000, 10000};
+        int iterations = 5;
+        String[] patterns = {"random", "nearly_sorted", "reverse"};
+
+        for (String pattern : patterns) {
+            System.out.println("\nPattern: " + pattern);
+            System.out.println("======================================================================================");
+            System.out.printf("| %-6s | %-13s | %-13s | %-13s | %-13s | %-10s|%n",
+                    "n", "TreapSort", "PQSort", "TimSort", "QuickSort", "MergeSort");
+            System.out.println("======================================================================================");
+
+            for (int n : sizes) {
+                int[] data = generateData(n, pattern);
+
+                long treap = benchmarkTreapSort(data, iterations);
+                long pq    = benchmarkPQSort(data, iterations);
+                long tim   = benchmarkCollectionsSort(data, iterations);
+                long quick = benchmarkQuickSort(data, iterations);
+                long merge = benchmarkMergeSort(data, iterations);
+
+                System.out.printf("| %-6d | %-13.3f | %-13.3f | %-13.3f | %-13.3f | %-10f|%n",
+                        n,
+                        treap  / 1_000_000.0,
+                        pq     / 1_000_000.0,
+                        tim    / 1_000_000.0,
+                        quick  / 1_000_000.0,
+                        merge  / 1_000_000.0);
+            }
+
+            System.out.println("======================================================================================");
+        }
+    }
 }
