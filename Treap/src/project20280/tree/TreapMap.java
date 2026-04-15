@@ -116,7 +116,7 @@ public class TreapMap<K, V> extends TreeMap<K, V> {
         return isBST(left(p), lower, key) && isBST(right(p), key, upper);
     }
 
-    // making an empt list and filling it with Treap entries in sorted order
+    // making an empty list and filling it with Treap entries in sorted order
     public ArrayList<Entry<K, V>> inOrderList() {
         // in order traversal from the root
         ArrayList<Entry<K, V>> list = new ArrayList<>();
