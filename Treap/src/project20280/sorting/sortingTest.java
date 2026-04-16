@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 public class sortingTest {
     private static final int[] SIZES = {100, 500, 1000, 2000, 5000, 10000};//Sets the list sizes
     private static final String[] PATTERNS = {"random", "nearly_sorted", "reverse"};
-    private static final int ITERATIONS = 5;//% times to run each test
+    private static final int ITERATIONS = 5;// times to run each test
 
     private void printHeader(String pattern) {
         System.out.println("\n Pattern: " + pattern);
@@ -17,34 +17,34 @@ public class sortingTest {
     private void printFooter() { //Draw the bottom line
         System.out.println("+--------+---------------+---------------+---------------+---------------+---------------+");
     }
-    @Test
+    @Test//Test for random numbers
     void testRandom() {
-        printHeader("random");
-        for (int n : SIZES) {
-            int[] data = Benchmark.generateData(n, "random");
+        printHeader("random");//Draws the table header
+        for (int n : SIZES) { //Loop through every size 
+            int[] data = Benchmark.generateData(n, "random");//Benchmark to build a random array of size n
             print(n, data);
         }
         printFooter();
     }
 
-    @Test
+    @Test //test for the numbers that are already mostly in order
     void testNearlySorted() {
         printHeader("nearly_sorted");
-        for (int n : SIZES) {
+        for (int n : SIZES) {// Loops through every size again
             int[] data = Benchmark.generateData(n, "nearly_sorted");
             print(n, data);
         }
         printFooter();
     }
 
-    @Test// TEst for numbers that are completely backwards
+    @Test// Test for numbers that are completely backwards
     void testReverse() {
         printHeader("reverse");
         for (int n : SIZES) {
-            int[] data = Benchmark.generateData(n, "reverse");
+            int[] data = Benchmark.generateData(n, "reverse");//builds the array of backwards numbers
             print(n, data);
         }
-        printFooter();
+        printFooter();//Close line
     }
 
     private void print(int n, int[] data) {
