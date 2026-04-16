@@ -106,12 +106,12 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
     /**
      * Ensure that current tree structure is valid AVL (for debug use only).
      */
-    private boolean sanityCheck() {
+    private boolean sanityCheck() { //look at the whole tree if it's balanced
         for (Position<Entry<K, V>> p : tree.positions()) {
             if (isInternal(p)) {
                 if (p.getElement() == null)
                     System.out.println("VIOLATION: Internal node has null entry");
-                else if (height(p) != 1 + Math.max(height(left(p)), height(right(p)))) {
+                else if (height(p) != 1 + Math.max(height(left(p)), height(right(p)))) { //check the formula is broken
                     System.out.println("VIOLATION: AVL unbalanced node with key " + p.getElement().getKey());
                     dump();
                     return false;
@@ -120,12 +120,12 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
         }
         return true;
     }
-
+    //tostring to deplay on the screen
     public String toBinaryTreeString() {
         BinaryTreePrinter<Entry<K, V>> btp = new BinaryTreePrinter<>(this.tree);
         return btp.print();
     }
-
+    //Test for adding number,print the tree,remove a number
     public static void main(String[] args) {
         AVLTreeMap avl = new AVLTreeMap<>();
 
