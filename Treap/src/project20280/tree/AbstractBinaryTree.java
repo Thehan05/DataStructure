@@ -137,18 +137,18 @@ public abstract class AbstractBinaryTree<E> extends AbstractTree<E>
     // EXTERNAL NODE COUNT
     public int externalNodes() {
         if (isEmpty()) return 0;
-        return externalCount(root());
+        return externalCount(root());//Counting from the root
     }
 
     private int externalCount(Position<E> p) {
         Position<E> L = left(p);
         Position<E> R = right(p);
-
+        //If no children its bottom node
         if (L == null && R == null) return 1;
 
         int count = 0;
-        if (L != null) count += externalCount(L);
-        if (R != null) count += externalCount(R);
+        if (L != null) count += externalCount(L);//Counting the node on the left side
+        if (R != null) count += externalCount(R);//Counting from right side
         return count;
     }
 
@@ -163,12 +163,12 @@ public abstract class AbstractBinaryTree<E> extends AbstractTree<E>
 
         Position<E> L = left(p);
         Position<E> R = right(p);
-
-        if (L == null && R == null) {          // leaf
+        //print its value if no children
+        if (L == null && R == null) {          
             System.out.print(p.getElement() + " ");
             return;
         }
-
+        //keeping looking left side then right 
         printLeaves(L);
         printLeaves(R);
     }
