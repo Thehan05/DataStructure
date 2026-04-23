@@ -399,7 +399,7 @@ public class PerformanceComparison {
     public static long benchmarkTreapTraversal(List<Integer> data, int iterations) {
         long total = 0;
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 3; i++) {
             TreapMap<Integer, Integer> map = new TreapMap<>();
             for (Integer x : data) {
                 map.put(x, x);
@@ -430,7 +430,7 @@ public class PerformanceComparison {
     public static long benchmarkAVLTraversal(List<Integer> data, int iterations) {
         long total = 0;
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 3; i++) {
             AVLTreeMap<Integer, Integer> map = new AVLTreeMap<>();
             for (Integer x : data) {
                 map.put(x, x);
@@ -461,7 +461,7 @@ public class PerformanceComparison {
     public static long benchmarkJavaTreeMapTraversal(List<Integer> data, int iterations) {
         long total = 0;
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 3; i++) {
             java.util.TreeMap<Integer, Integer> map = new java.util.TreeMap<>();
             for (Integer x : data) {
                 map.put(x, x);
